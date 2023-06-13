@@ -1,0 +1,18 @@
+
+# Server Requirements
+
+PHP Version 8.1
+MySQL Version 5.7+ or MariaDB version 10.2+
+Node version: 14+
+
+laravel-framework: "^10.10"
+
+#Project set up
+
+1. First clone project form github
+2. Run composer install by command : composer install
+3.install npm by command: npm install,
+4. Run Database migration by : php artisan migrate
+
+And go
+

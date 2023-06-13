@@ -5,11 +5,20 @@
                 <h4 class="mb-3">List of submissions</h4>
                 <div class="search-bar">
                     <div class="row">
-                        <div class="col-md-6">
-                            <input type="text" v-model="entryDate" placeholder="Search by Entry Date"
-                                class="form-control" />
+
+                        <div class="col-md-3 d-flex align-items-center">
+                            <label for="" >User id</label>
+                            <input  type="text" v-model="searchQuery" placeholder="Search by User ID" class="form-control" />
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3 d-flex align-items-center">
+                            <label for="">Start Date</label>
+                            <input type="date" v-model="startDate" class="form-control" />
+                        </div>
+                        <div class="col-md-3 d-flex align-items-center">
+                            <label for="">End Date</label>
+                            <input type="date" v-model="endDate" class="form-control" />
+                        </div>
+                        <div class="col-md-2 ">
                             <button @click="search" class="btn btn-primary">Search</button>
                         </div>
 
@@ -30,6 +39,7 @@
                             <th scope="col">City</th>
                             <th scope="col">Phone</th>
                             <th scope="col">EntryAt</th>
+                            <th scope="col">EntryBy</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -45,6 +55,7 @@
                             <td>{{ value.city }}</td>
                             <td>{{ value.phone }}</td>
                             <td>{{ value.entry_at }}</td>
+                            <td>{{ value.entry_by}}</td>
                             <td>
                                 <!-- <span class="mr-2">
                                     <font-awesome-icon icon="trash-alt" :style="{ color: 'red' }" />
@@ -141,7 +152,7 @@
 </template>
 <script >
 import { Form, Field, ErrorMessage } from 'vee-validate';
-import VueCookies  from 'vue-cookies';
+import VueCookies from 'vue-cookies';
 const COOKIE_NAME = 'submission_limit';
 const COOKIE_EXPIRATION_DAYS = 1;
 export default {
@@ -168,7 +179,9 @@ export default {
             currentPage: 1,
             pageSize: 10,
             totalItems: 0,
-            entryDate: '',
+            searchQuery: null,
+            startDate: null,
+            endDate: null,
         };
     },
     plugins: [VueCookies],
@@ -213,7 +226,9 @@ export default {
                 params: {
                     page: this.currentPage,
                     pageSize: this.pageSize,
-                    entryDate: this.entryDate,
+                    searchQuery: this.searchQuery,
+                    startDate: this.startDate,
+                    endDate: this.endDate,
                 },
             }).then((response) => {
                 this.submissions_list = response.data.data;
@@ -281,7 +296,7 @@ export default {
             });
             const now = Date.now();
             this.$cookies.set(COOKIE_NAME, now.toString(), {
-                expires: new Date(Date.now() + COOKIE_EXPIRATION_DAYS * 24 * 60 * 60 * 1000), 
+                expires: new Date(Date.now() + COOKIE_EXPIRATION_DAYS * 24 * 60 * 60 * 1000),
             });
         },
         prevPage() {

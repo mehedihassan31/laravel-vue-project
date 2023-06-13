@@ -17,11 +17,25 @@ class SubmissionController extends Controller
      */
     public function index(Request $request)
     {
+
+        // dd($request->all());
         $query = Submission::query();
-        if ($request->has('entryDate') && $request->entryDate !=null ) {
-            $entryDate = $request->input('entryDate');
-            $query->whereDate('entry_at', $entryDate);
+
+        $entryBy = $request->input('searchQuery');
+        if ($entryBy) {
+            $query->where('entry_by', $entryBy);
         }
+
+        $startDate = $request->input('startDate');
+        $endDate = $request->input('endDate');
+        if ($startDate  && $endDate ) {
+            $query->whereBetween('entry_at', [$startDate, $endDate]);
+        } else if ($startDate) {
+            $query->where('entry_at', '>=', $startDate);
+        } else if ($endDate) {
+            $query->where('entry_at', '<=', $endDate);
+        }
+
         $submissions = $query->paginate(10);
 
         return $submissions;
